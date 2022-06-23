@@ -7,4 +7,9 @@ then
   macadd=rbpi-${macadd:8:12}
   sed "s/raspberrypi/${macadd}/g" -i /etc/hostname /etc/hosts
 fi
+
+# disable auto-login on tty1
+login_file="/etc/systemd/system/getty@tty1.service.d/autologin.conf"
+mv "${login_file}" "${login_file}.disabled"
+
 /sbin/shutdown -r 5 "reboot in Five minutes"
