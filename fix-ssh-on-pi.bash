@@ -66,8 +66,8 @@ else
 fi
 
 variables=(
-  root_password_hash
-  pi_password_hash
+  new_user
+  new_password_hash
   public_key_file
   wifi_file
   os_variant
@@ -177,6 +177,9 @@ then
     exit 10
 fi
 
+# New format to update user and password
+echo "${new_user}:${new_password_hash}" > "${sdcard_mount}/userconf"
+
 if [ -e "${first_boot}" ]
 then
   cp -v "${first_boot}" "${sdcard_mount}/firstboot.sh"
@@ -197,8 +200,6 @@ fi
 
 echo "Change the passwords and sshd_config file"
 
-sed -e "s#^root:[^:]\+:#root:${root_password_hash}:#" "${sdcard_mount}/etc/shadow" -e  "s#^pi:[^:]\+:#pi:${pi_password_hash}:#" -i "${sdcard_mount}/etc/shadow"
-sed -e 's;^#PasswordAuthentication.*$;PasswordAuthentication no;g' -e 's;^PermitRootLogin .*$;PermitRootLogin no;g' -i "${sdcard_mount}/etc/ssh/sshd_config"
 mkdir "${sdcard_mount}/home/pi/.ssh"
 chmod 0700 "${sdcard_mount}/home/pi/.ssh"
 chown 1000:1000 "${sdcard_mount}/home/pi/.ssh"
