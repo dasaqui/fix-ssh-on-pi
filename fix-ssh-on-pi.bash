@@ -200,6 +200,10 @@ fi
 
 echo "Change the passwords and sshd_config file"
 
+# disable auto-login on tty1
+login_file=${sdcard_mount}/etc/systemd/system/getty@tty1.service.d/autologin.conf
+mv "${login_file}"" "${login_file}.disabled"
+
 mkdir "${sdcard_mount}/home/pi/.ssh"
 chmod 0700 "${sdcard_mount}/home/pi/.ssh"
 chown 1000:1000 "${sdcard_mount}/home/pi/.ssh"
